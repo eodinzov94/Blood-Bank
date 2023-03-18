@@ -5,29 +5,21 @@ const bloodTypes = ['A+', 'A-', 'B+', 'B-', 'O+', 'O-', 'AB+', 'AB-']
 
 interface DonateBloodProps {
     updateReserve: Function
+    setMsg: Function
 }
 
 
-const DonateBlood:FC<DonateBloodProps> = ({updateReserve}) => {
+const DonateBlood:FC<DonateBloodProps> = ({updateReserve,setMsg}) => {
     const [selectedType, setType] = useState('A+')
-    const [quantity, setQuantity] = useState(1)
+    const [id, setId] = useState('')
     const donateHandler = () => {
-        updateReserve({bloodType:selectedType,quantity})
+        updateReserve({bloodType:selectedType,quantity:1})
+        setMsg('Added blood pack successfully')
     }
     return (
         <Card sx={{minWidth: 275}}>
             <CardContent sx={{display:"flex",flexDirection:"row", gap:3}}>
-                <TextField
-                    id="outlined-number"
-                    label="Number"
-                    type="number"
-                    value = {quantity}
-                    onChange={(e)=>setQuantity(Number(e.target.value))}
-                    InputProps={{
-                        inputProps: { min: 1,step:1 }
-                    }}
 
-                />
                 <Select
 
                     value={selectedType}
@@ -37,6 +29,14 @@ const DonateBlood:FC<DonateBloodProps> = ({updateReserve}) => {
                 >
                     {bloodTypes.map(type => <MenuItem value={type}>{type}</MenuItem>)}
                 </Select>
+
+                <TextField
+                    id="outlined-number"
+                    label="ID"
+                    type="text"
+                    value = {id}
+                    onChange={(e)=>setId(e.target.value)}
+                />
             </CardContent>
             <CardActions sx={{display:"flex",justifyContent:"right"}}>
                 <Button  size="medium" variant={"contained"} onClick={donateHandler}>Add</Button>

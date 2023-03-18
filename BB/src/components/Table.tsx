@@ -33,11 +33,10 @@ function Row(props: { row: { bloodType:string,quantity:number } }) {
     );
 }
 interface MyTableProps {
-    updateReserve: Function
     data : { bloodType:string,quantity:number }[]
 }
 
-const MyTable:FC<MyTableProps> = ({updateReserve,data}) =>{
+const MyTable:FC<MyTableProps> = ({data}) =>{
     return (
         <TableContainer component={Paper}>
             <Typography variant="h5" >

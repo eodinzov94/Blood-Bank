@@ -1,23 +1,39 @@
 import React, {FC, useState} from 'react';
-import {Box, Button, MenuItem, MenuList, Modal} from "@mui/material";
+import {Alert, Box, Button, MenuItem, MenuList, Modal, Snackbar} from "@mui/material";
 import DonateBlood from "./DonateBlood";
 import CloseIcon from '@mui/icons-material/Close';
 import WithdrawIcu from "./WithdrawICU";
+import EmergencyWithdraw from "./EmergencyWithdraw";
 
 const components = [
     DonateBlood, WithdrawIcu, null
 ]
-interface MenuProps{
-    updateReserve: Function
+
+interface MenuProps {
+    addToReserve: Function
+    removeFromReserve: Function
 
 }
-const Menu:FC<MenuProps> = ({updateReserve}) => {
+
+const Menu: FC<MenuProps> = ({removeFromReserve, addToReserve}) => {
     const [isOpen, setOpen] = useState(false)
     const [selectedComponent, setComponent] = useState<'donateBlood' | 'withdrawICU' | 'withdrawEmergency'>('donateBlood')
+    const [msg,setMsg] = useState('')
     return (
 
         <MenuList
         >
+            { msg &&
+            <Snackbar
+                open={true}
+                autoHideDuration={2000}
+                onClose={()=>setMsg('')}
+                anchorOrigin={{ vertical: "top", horizontal: "left" }}
+            >
+                <Alert severity='success' onClose={()=>setMsg('')}>
+                    {msg}
+                </Alert>
+            </Snackbar>}
             <MenuItem onClick={() => {
                 setOpen(true)
                 setComponent('donateBlood')
@@ -39,21 +55,26 @@ const Menu:FC<MenuProps> = ({updateReserve}) => {
                     margin: "50px auto",
                 }}>
                     <>
-                        <Button sx={{marginBottom:1,float:"right"}}
+                        <Button sx={{marginBottom: 1, float: "right"}}
                                 variant={"text"}
                                 color={"secondary"}
                                 onClick={() => setOpen(false)}
                         ><CloseIcon/></Button>
                         {
                             selectedComponent === 'donateBlood' ?
-                            <DonateBlood updateReserve={updateReserve}/> :
-                            selectedComponent === 'withdrawEmergency' ?
-                            <div>EMERGENCY</div> :
-                            <WithdrawIcu updateReserve={updateReserve}/>
+                                <DonateBlood updateReserve={addToReserve} setMsg = {setMsg}/> :
+                                selectedComponent === 'withdrawEmergency' ?
+                                    <EmergencyWithdraw removeFromReserve={removeFromReserve}
+                                                       closeModal={() => setOpen(false)}
+                                                           setMsg={setMsg}
+
+                                    /> :
+                                    <WithdrawIcu removeFromReserve={removeFromReserve}
+                                                 closeModal={() => setOpen(false)}
+                            setMsg = {setMsg}
+                            />
                         }
                     </>
-
-
                 </Box>
             </Modal>
         </MenuList>

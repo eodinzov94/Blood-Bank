@@ -1,14 +1,12 @@
-
-
+#root {
+  margin: 0 auto;
+  text-align: center;
+}
 
 body {
   display: flex;
   place-items: center;
   min-height: 100vh;
 }
-
-
-
-
 
 
